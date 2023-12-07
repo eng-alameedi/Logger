@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <ostream>
+#include <sstream>
 #include <string>
 
 // Logger::Logger(const std::string& filename, LogLevel level) : logLevel(level)
@@ -55,7 +56,8 @@ void Logger::writeToLog(const std::string& logMessage)
 {
   if (outputFile.is_open())
     {
-      outputFile << logMessage << std::endl;
+      // outputFile << logMessage << std::endl;
+      outputFile << logMessage;
       outputFile.flush();
     }
   else
@@ -73,7 +75,8 @@ void Logger::writeToLog(const std::string& logMessage)
     }
   else
     {
-      std::cout << logMessage << std::endl;
+      // std::cout << logMessage << std::endl;
+      std::cout << logMessage;
     }
 }
 
@@ -91,13 +94,19 @@ std::string Logger::getLogLevelString(LogLevel level)
       return "[UNKNOWN] ";
     }
 }
-
-Logger& Logger::operator<<(const std::string& message)
+/*
+template <typename T>
+Logger& Logger::operator<<(const T& value)
 {
-  log(this->logLevel, message);
+  if (this->logLevel <= LogLevel::TRACE)
+    {
+      std::ostringstream oss;
+      oss << value;
+      log(this->logLevel, oss.str());
+    }
   return (*this);
 }
-
+*/
 Logger& Logger::operator()(LogLevel&& lev_el)
 {
   this->setLogLevel(lev_el);
