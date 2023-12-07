@@ -1,6 +1,8 @@
-.PHONY: all clean
+.PHONY: all build clean
 
-all:
+all: build
+
+build:
 	@echo "Building Start...!"
 	mkdir -p build
 	mkdir -p build/bin
@@ -10,5 +12,5 @@ all:
 
 clean:
 	@echo "Cleaning Start...!"
-	rm -rf ../build .cashe
+	rm -rf build .cashe
 	@echo "Cleaning Finished"
