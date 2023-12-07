@@ -1,5 +1,7 @@
 # Prerequisites
 *.d
+.cache/clangd/index
+.cache
 
 # Compiled Object files
 *.slo
@@ -30,3 +32,15 @@
 *.exe
 *.out
 *.app
+
+# Directory to Exclude
+build
+bin
+docs/html
+docs/latex
+tests
+tests/test
+
+# Exclude .cpp file
+main.cpp
+
