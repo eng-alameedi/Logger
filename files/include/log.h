@@ -1,15 +1,17 @@
-#pragma once
-
-#include <ostream>
-#include <sstream>
-#define YELLOW "\033[1;33m"
-#define RED "\033[1;31m"
-#define RESET_COLOR "\033[0m"
+#ifndef _LOG_H_
+#define _LOG_H_
 
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <string>
-enum class LogLevel
+
+#define YELLOW "\033[1;33m"
+#define RED "\033[1;31m"
+#define RESET_COLOR "\033[0m"
+#define GREEN "\033[1;32m"
+
+enum LogLevel
 {
   TRACE,
   DEBUG,
@@ -21,47 +23,36 @@ enum class LogLevel
   FATAL
 };
 
-#define WARN LogLevel::WARNING
+#define DEB LogLevel::DEBUG
 #define INFO LogLevel::INFO
+#define WARN LogLevel::WARNING
 #define ERR LogLevel::ERROR
 
-class Logger
+namespace GMIVLS
 {
- public:
-  // Logger(const std::string&, LogLevel);
-  Logger();
-  ~Logger();
 
-  void setLogLevel(LogLevel);
-  void log(LogLevel, const std::string&);
-
-  template <typename T>
-  Logger& operator<<(const T& value)
+  class Logger
   {
-    if (this->logLevel <= LogLevel::FATAL)
-      {
-        std::ostringstream oss;
-        oss << value;
-        log(this->logLevel, oss.str());
-      }
-    return *this;
-  }
+   public:
+    Logger();
+    ~Logger();
 
-  Logger& operator<<(std::ostream& (*manipulator)(std::ostream&))
-  {
-    manipulator(std::cout);  // Handle manipulators like std::endl
-    // manipulator(oss);
-    // log(this->logLevel, oss.str());
-    return *this;
-  }
+    void setLogLevel(LogLevel);
+    void log(LogLevel, const std::string&);
 
-  Logger& operator()(LogLevel&&);
+    // Logger& operator()(LogLevel&&);
+    // template <typename T>
+    // Logger& operator<<(const T&);
+#include "operator.tpp"
+   private:
+    std::ofstream outputFile;
+    LogLevel logLevel;
+    std::ostringstream oss;
+    void open_file();
+    void close_file();
+    void writeToLog(const std::string&);
+    std::string getLogLevelString(LogLevel);
+  };
 
- private:
-  std::ofstream outputFile;
-  // std::ostringstream oss;
-  LogLevel logLevel;
-
-  void writeToLog(const std::string&);
-  std::string getLogLevelString(LogLevel);
-};
+}  // namespace GMIVLS
+#endif  // _LOG_H_

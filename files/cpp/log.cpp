@@ -8,107 +8,135 @@
 #include <sstream>
 #include <string>
 
-// Logger::Logger(const std::string& filename, LogLevel level) : logLevel(level)
-Logger::Logger()
+namespace GMIVLS
 {
-  std::string filename = "/log.txt";
-  std::string logDir = "log";
-  std::string cmd = "mkdir -p " + logDir;
-  std::system(cmd.c_str());
+  Logger::Logger()
+  {
+    try
+      {
+        open_file();
+        log(INFO, "log file opened");
+      }
+    catch (std::string& ex)
+      {
+        log(LogLevel::FATAL, ex);
+        std::exit;
+      }
+  }
 
-  if (!outputFile.is_open())
-    {
-      std::string file = logDir + filename;
-      // std::cout << file << std::endl;
-      outputFile.open(file.c_str(), std::ios::app);
-    }
-  else
-    std::cout << "Error: Can't open file";
-}
+  Logger::~Logger()
+  {
+    try
+      {
+        close_file();
+      }
+    catch (std::string& ex)
+      {
+        log(ERR, "Error, log file not closed");
+      }
+  }
 
-Logger::~Logger()
-{
-  if (outputFile.is_open())
-    {
-      outputFile.close();
-    }
-  else
-    std::cout << "Files Closed...!" << std::endl;
-}
+  void Logger::setLogLevel(LogLevel level) { logLevel = level; }
 
-void Logger::setLogLevel(LogLevel level) { logLevel = level; }
+  void Logger::log(LogLevel level, const std::string& message)
+  {
+    if (level >= INFO)
+      {
+        std::time_t now = std::time(nullptr);
+        char timestamp[100];
+        std::strftime(
+            timestamp, sizeof(timestamp), "[%Y-%m-%d %H:%M:%S] ",
+            std::localtime(&now));
+        try
+          {
+            {
+              writeToLog(getLogLevelString(level) + timestamp + message);
+            }
+          }
+        catch (std::string& ex)
+          {
+            log(ERR, ex);
+          }
+      }
+  }
 
-void Logger::log(LogLevel level, const std::string& message)
-{
-  if (level >= logLevel)
-    {
-      std::time_t now = std::time(nullptr);
-      char timestamp[100];
-      std::strftime(
-          timestamp, sizeof(timestamp), "[%Y-%m-%d %H:%M:%S] ",
-          std::localtime(&now));
+  void Logger::writeToLog(const std::string& logMessage)
+  {
+    if (outputFile.is_open())
+      {
+        outputFile << logMessage << std::endl;
+        outputFile.flush();
+      }
+    else
+      {
+        throw "Can't Write to File";
+      }
+    // Output colored logs to the terminal
+    if (logMessage.find("[ERROR]") != std::string::npos)
+      {
+        std::cout << RED << logMessage << RESET_COLOR << std::endl;
+      }
+    else if (logMessage.find("[WARNING]") != std::string::npos)
+      {
+        std::cout << YELLOW << logMessage << RESET_COLOR << std::endl;
+      }
+    else if (logMessage.find("[DEBUG]") != std::string::npos)
+      {
+        std::cout << GREEN << logMessage << RESET_COLOR << std::endl;
+      }
+    else if (logMessage.find("[FATAL]") != std::string::npos)
+      {
+        std::cout << RED << logMessage << RESET_COLOR << std::endl;
+      }
+    else
+      {
+        std::cout << logMessage << std::endl;
+      }
+  }
 
-      writeToLog(getLogLevelString(level) + timestamp + message);
-    }
-}
+  std::string Logger::getLogLevelString(LogLevel level)
+  {
+    switch (level)
+      {
+      case LogLevel::DEBUG:
+        return "[DEBUG]";
+      case INFO:
+        return "[INFO] ";
+      case WARN:
+        return "[WARNING] ";
+      case ERR:
+        return "[ERROR] ";
+      case LogLevel::FATAL:
+        return "[FATAL]";
+      default:
+        return "[UNKNOWN] ";
+      }
+  }
 
-void Logger::writeToLog(const std::string& logMessage)
-{
-  if (outputFile.is_open())
-    {
-      // outputFile << logMessage << std::endl;
-      outputFile << logMessage;
-      outputFile.flush();
-    }
-  else
-    {
-      std::cout << "Can't Find the File" << std::endl;
-    }
-  // Output colored logs to the terminal
-  if (logMessage.find("[ERROR]") != std::string::npos)
-    {
-      std::cout << RED << logMessage << RESET_COLOR << std::endl;
-    }
-  else if (logMessage.find("[WARNING]") != std::string::npos)
-    {
-      std::cout << YELLOW << logMessage << RESET_COLOR << std::endl;
-    }
-  else
-    {
-      // std::cout << logMessage << std::endl;
-      std::cout << logMessage;
-    }
-}
+  void Logger::open_file()
+  {
+    std::string filename = "/log.txt";
+    std::string logDir = "log";
+    std::string cmd = "mkdir -p " + logDir;
+    std::system(cmd.c_str());
 
-std::string Logger::getLogLevelString(LogLevel level)
-{
-  switch (level)
-    {
-    case INFO:
-      return "[INFO] ";
-    case WARN:
-      return "[WARNING] ";
-    case ERR:
-      return "[ERROR] ";
-    default:
-      return "[UNKNOWN] ";
-    }
-}
-/*
-template <typename T>
-Logger& Logger::operator<<(const T& value)
-{
-  if (this->logLevel <= LogLevel::TRACE)
-    {
-      std::ostringstream oss;
-      oss << value;
-      log(this->logLevel, oss.str());
-    }
-  return (*this);
-}
-*/
-Logger& Logger::operator()(LogLevel&& lev_el)
-{
-  this->setLogLevel(lev_el);
-  return (*this);
-}
+    if (!outputFile.is_open())
+      {
+        std::string file = logDir + filename;
+        outputFile.open(file.c_str(), std::ios::app);
+      }
+    else
+      throw "File Not Opened";
+  }
+
+  void Logger::close_file()
+  {
+    log(INFO, "log file closed");
+    outputFile.close();
+
+    if (outputFile.is_open())
+      {
+        throw "File Not Closed";
+      }
+  }
+}  // namespace GMIVLS
