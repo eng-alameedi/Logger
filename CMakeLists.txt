@@ -4,7 +4,7 @@ project(LogLib
   VERSION 1.0.0
   LANGUAGES CXX)
 
-set(name log_test)
+set(name gmlog)
 set(cpp_file
   files/main.cpp
   files/cpp/log.cpp)
