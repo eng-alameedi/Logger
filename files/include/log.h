@@ -40,10 +40,8 @@ namespace GMIVLS
     void setLogLevel(LogLevel);
     void log(LogLevel, const std::string&);
 
-    // Logger& operator()(LogLevel&&);
-    // template <typename T>
-    // Logger& operator<<(const T&);
 #include "operator.tpp"
+
    private:
     std::ofstream outputFile;
     LogLevel logLevel;
