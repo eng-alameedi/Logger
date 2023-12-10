@@ -25,3 +25,5 @@ target_include_directories(${name} PUBLIC ${CMAKE_SOURCE_DIR}/files/include/log.
 if(CMAKE_BUILD_TYPE MATCHES Release)
   target_compile_options(${name} INTERFACE -03 -DNDEBUG)
 endif()
+
+include(CPack)
