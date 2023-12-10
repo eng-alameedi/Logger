@@ -4,6 +4,7 @@
       if (this->logLevel <= LogLevel::FATAL)
         {
           //std::ostringstream oss;
+          oss.str("");
           oss << value;
 
           log(this->logLevel, oss.str());
