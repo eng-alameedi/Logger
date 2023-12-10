@@ -40,7 +40,7 @@ namespace GMIVLS
 
   void Logger::log(LogLevel level, const std::string& message)
   {
-    if (level >= INFO)
+    if (level >= LogLevel::TRACE)
       {
         std::time_t now = std::time(nullptr);
         char timestamp[100];
@@ -98,8 +98,8 @@ namespace GMIVLS
   {
     switch (level)
       {
-      case LogLevel::DEBUG:
-        return "[DEBUG]";
+      case DEB:
+        return "[DEBUG] ";
       case INFO:
         return "[INFO] ";
       case WARN:
