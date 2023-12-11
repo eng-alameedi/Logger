@@ -23,10 +23,14 @@ enum LogLevel
   FATAL
 };
 
-#define DEB LogLevel::DEBUG
+#define TRACE LogLevel::TRACE
+#define DEBUG LogLevel::DEBUG
 #define INFO LogLevel::INFO
-#define WARN LogLevel::WARNING
-#define ERR LogLevel::ERROR
+#define WARNING LogLevel::WARNING
+#define ERROR LogLevel::ERROR
+#define CRITICAL LogLevel::CRITICAL
+#define EMERGENCY LogLevel::EMERGENCY
+#define FATAL LogLevel::FATAL
 
 namespace GMIVLS
 {
