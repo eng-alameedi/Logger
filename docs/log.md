@@ -2,6 +2,29 @@
 
 The `Log` class is designed to provide logging functionality by displaying messages on the console and writing them to a `log.txt` file along with timestamps.
 
+```lua
++------------------------------------------------+
+|                 GMIVLS::Logger                 |
++------------------------------------------------+
+| - outputFile : std::ofstream                   |
+| - oss : std::ostringstream                     |
+| - loglevel : LogLevel(enum)                    |
+| - open_file : void                             |
+| - close_file : void                            |
+| - writeToLog(std::string&) : void              |
+| - getLogLevelString(LogLevel) : std::string    |
++------------------------------------------------+
+| + Logger() : constructor                       |
+| + ~Logger() : destructor                       |
++------------------------------------------------+
+| + setLogLevel(LogLevel) : void                 |
+| + log(LogLevel, std::string&) : void           |
++------------------------------------------------+
+| + operator()(LogLevel) : Logger                |
+| + operator<<(std::string&) : Logger            |
++------------------------------------------------+
+```
+
 ## Features
 
 ### Console Logging
@@ -26,10 +49,10 @@ To use the `Log` class, instantiate an object as follows:
 #include "Log.h" // Include necessary headers
 
 int main() {
-    Logger LOG; // Instantiate a Log object
+    GMIVLS::Logger LOG; // Instantiate a Log object
     LOG(INFO) << "Logging with operator overload.";           //the message with timestamp will written to console (colored with white) and log.txt
-    LOG(WARN) << "Warn Memory Address, Still Used by Ptr";    // the warning message will written to console (colored orange) and to log.txt file.
-    LOG(ERR) << "Fatal Error, Program Execution Stopped";     // the error message will written to console (coloored red) and to log.txt file
+    LOG(WARNING) << "Warn Memory Address, Still Used by Ptr";    // the warning message will written to console (colored orange) and to log.txt file.
+    LOG(ERROR) << "Fatal Error, Program Execution Stopped";     // the error message will written to console (coloored red) and to log.txt file
 
     return 0;
 }
