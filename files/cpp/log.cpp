@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <ctime>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <ostream>
@@ -19,7 +20,7 @@ namespace GMIVLS
       }
     catch (std::string& ex)
       {
-        log(LogLevel::FATAL, ex);
+        log(FATAL, ex);
         std::exit;
       }
   }
@@ -32,7 +33,7 @@ namespace GMIVLS
       }
     catch (std::string& ex)
       {
-        log(ERR, "Error, log file not closed");
+        log(ERROR, "Error, log file not closed");
       }
   }
 
@@ -40,7 +41,7 @@ namespace GMIVLS
 
   void Logger::log(LogLevel level, const std::string& message)
   {
-    if (level >= LogLevel::TRACE)
+    if (level >= TRACE)
       {
         std::time_t now = std::time(nullptr);
         char timestamp[100];
@@ -55,7 +56,7 @@ namespace GMIVLS
           }
         catch (std::string& ex)
           {
-            log(ERR, ex);
+            log(ERROR, ex);
           }
       }
   }
@@ -76,7 +77,15 @@ namespace GMIVLS
       {
         std::cout << RED << logMessage << RESET_COLOR << std::endl;
       }
+    else if (logMessage.find("[EMERGENCY]") != std::string::npos)
+      {
+        std::cout << RED << logMessage << RESET_COLOR << std::endl;
+      }
     else if (logMessage.find("[WARNING]") != std::string::npos)
+      {
+        std::cout << YELLOW << logMessage << RESET_COLOR << std::endl;
+      }
+    else if (logMessage.find("[CRITICAL]") != std::string::npos)
       {
         std::cout << YELLOW << logMessage << RESET_COLOR << std::endl;
       }
@@ -98,15 +107,21 @@ namespace GMIVLS
   {
     switch (level)
       {
-      case DEB:
+      case TRACE:
+        return "[TRACE]";
+      case DEBUG:
         return "[DEBUG] ";
       case INFO:
         return "[INFO] ";
-      case WARN:
+      case WARNING:
         return "[WARNING] ";
-      case ERR:
+      case ERROR:
         return "[ERROR] ";
-      case LogLevel::FATAL:
+      case CRITICAL:
+        return "[CRITICAL]";
+      case EMERGENCY:
+        return "[EMERGENCY]";
+      case FATAL:
         return "[FATAL]";
       default:
         return "[UNKNOWN] ";
@@ -117,8 +132,13 @@ namespace GMIVLS
   {
     std::string filename = "/log.txt";
     std::string logDir = "log";
-    std::string cmd = "mkdir -p " + logDir;
-    std::system(cmd.c_str());
+    // std::string cmd = "mkdir -p " + logDir;
+    // std::filesystem::create_directory(logDir);
+    if (!std::filesystem::is_directory(logDir))
+      {
+        std::filesystem::create_directory(logDir);
+      }
+    // std::system(cmd.c_str());
 
     if (!outputFile.is_open())
       {
