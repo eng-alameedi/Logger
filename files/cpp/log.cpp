@@ -1,3 +1,9 @@
+/* @log.cpp file is the
+ * implementation of log
+ * class of the logger
+ * project
+ */
+
 #include "../include/log.h"
 
 #include <cstdlib>
