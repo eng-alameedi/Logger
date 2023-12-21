@@ -4,6 +4,7 @@
  * project
  */
 
+//! this is the log.h file include directive.
 #include "../include/log.h"
 
 #include <cstdlib>
@@ -15,6 +16,7 @@
 #include <sstream>
 #include <string>
 
+//! this is the logger namespace used to recognize from other STL
 namespace GMIVLS
 {
   Logger::Logger()
