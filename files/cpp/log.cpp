@@ -19,6 +19,8 @@
 //! this is the logger namespace used to recognize from other STL
 namespace GMIVLS
 {
+  //! Logger class implementation, and use try-catch block for error handling of
+  //! log.txt file opening.
   Logger::Logger()
   {
     try
@@ -32,7 +34,8 @@ namespace GMIVLS
         std::exit;
       }
   }
-
+  //! Logger class destructor with try-catch error handling for close the
+  //! log.txt file
   Logger::~Logger()
   {
     try
@@ -44,9 +47,10 @@ namespace GMIVLS
         log(ERROR, "Error, log file not closed");
       }
   }
-
+  //! simple setter method to set the logLevel
   void Logger::setLogLevel(LogLevel level) { logLevel = level; }
-
+  //! the log method, that takes logLevel and message. it's format the time and
+  //! date and trying to write the log to console and file.
   void Logger::log(LogLevel level, const std::string& message)
   {
     if (level >= TRACE)
