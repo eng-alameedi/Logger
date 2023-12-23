@@ -31,7 +31,7 @@ namespace GMIVLS
     catch (std::string& ex)
       {
         log(FATAL, ex);
-        std::exit;
+        std::exit;  //! the app will exit, if the can't open the log.txt file.
       }
   }
   //! Logger class destructor with try-catch error handling for close the
@@ -55,6 +55,8 @@ namespace GMIVLS
   {
     if (level >= TRACE)
       {
+        //! get the current time and date, the (nullptr) used to simple
+        //! calculate the current time and store it into an internal location
         std::time_t now = std::time(nullptr);
         char timestamp[100];
         std::strftime(
