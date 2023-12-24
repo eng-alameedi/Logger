@@ -75,6 +75,8 @@ namespace GMIVLS
       }
   }
 
+  //! the write log method, get log message and write it to console, and log.txt
+  //! file.
   void Logger::writeToLog(const std::string& logMessage)
   {
     if (outputFile.is_open())
@@ -116,7 +118,7 @@ namespace GMIVLS
         std::cout << logMessage << std::endl;
       }
   }
-
+  //! this is the method of get log level or severity
   std::string Logger::getLogLevelString(LogLevel level)
   {
     switch (level)
