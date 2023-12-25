@@ -1,3 +1,8 @@
+/* @log.h file is the header
+ * file for the logger project
+ * which contain
+ * */
+
 #ifndef _LOG_H_
 #define _LOG_H_
 
