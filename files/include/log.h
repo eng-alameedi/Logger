@@ -1,6 +1,10 @@
 /* @log.h file is the header
  * file for the logger project
- * which contain
+ * which contain a logger file
+ * that implement an output
+ * method as a log with logLevel
+ * and the log message out on
+ * console and on txt file
  * */
 
 #ifndef _LOG_H_
@@ -11,11 +15,13 @@
 #include <sstream>
 #include <string>
 
+//! definition of colors for log severity
 #define YELLOW "\033[1;33m"
 #define RED "\033[1;31m"
 #define RESET_COLOR "\033[0m"
 #define GREEN "\033[1;32m"
 
+//! an enum for the log level.
 enum LogLevel
 {
   TRACE,
@@ -28,6 +34,7 @@ enum LogLevel
   FATAL
 };
 
+//! define the variables, so the enum can called without the name LogLevel
 #define TRACE LogLevel::TRACE
 #define DEBUG LogLevel::DEBUG
 #define INFO LogLevel::INFO
@@ -39,13 +46,13 @@ enum LogLevel
 
 namespace GMIVLS
 {
-
+  //! the logger class definition
   class Logger
   {
    public:
     Logger();
     ~Logger();
-
+    //! this is the public methods definition
     void setLogLevel(LogLevel);
     void log(LogLevel, const std::string&);
 
@@ -55,6 +62,7 @@ namespace GMIVLS
     std::ofstream outputFile;
     LogLevel logLevel;
     std::ostringstream oss;
+    //! this is the private methods definition
     void open_file();
     void close_file();
     void writeToLog(const std::string&);
