@@ -1,3 +1,10 @@
+/* @log.cpp file is the
+ * implementation of log
+ * class of the logger
+ * project
+ */
+
+//! this is the log.h file include directive.
 #include "../include/log.h"
 
 #include <cstdlib>
@@ -9,8 +16,11 @@
 #include <sstream>
 #include <string>
 
+//! this is the logger namespace used to recognize from other STL
 namespace GMIVLS
 {
+  //! Logger class implementation, and use try-catch block for error handling of
+  //! log.txt file opening.
   Logger::Logger()
   {
     try
@@ -21,10 +31,11 @@ namespace GMIVLS
     catch (std::string& ex)
       {
         log(FATAL, ex);
-        std::exit;
+        std::exit;  //! the app will exit, if the can't open the log.txt file.
       }
   }
-
+  //! Logger class destructor with try-catch error handling for close the
+  //! log.txt file
   Logger::~Logger()
   {
     try
@@ -36,13 +47,16 @@ namespace GMIVLS
         log(ERROR, "Error, log file not closed");
       }
   }
-
+  //! simple setter method to set the logLevel
   void Logger::setLogLevel(LogLevel level) { logLevel = level; }
-
+  //! the log method, that takes logLevel and message. it's format the time and
+  //! date and trying to write the log to console and file.
   void Logger::log(LogLevel level, const std::string& message)
   {
     if (level >= TRACE)
       {
+        //! get the current time and date, the (nullptr) used to simple
+        //! calculate the current time and store it into an internal location
         std::time_t now = std::time(nullptr);
         char timestamp[100];
         std::strftime(
@@ -61,6 +75,8 @@ namespace GMIVLS
       }
   }
 
+  //! the write log method, get log message and write it to console, and log.txt
+  //! file.
   void Logger::writeToLog(const std::string& logMessage)
   {
     if (outputFile.is_open())
@@ -102,7 +118,7 @@ namespace GMIVLS
         std::cout << logMessage << std::endl;
       }
   }
-
+  //! this is the method of get log level or severity
   std::string Logger::getLogLevelString(LogLevel level)
   {
     switch (level)
